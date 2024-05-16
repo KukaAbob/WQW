@@ -1,0 +1,51 @@
+.abob{
+    background-color: black;
+}
+.Logo{
+    width: 100px;
+    height: 100px;
+}
+.navbar1{
+    background-color: aqua;
+    width: 1700px;
+    height: 175px;
+}
+.navdiv1{
+    margin-left:100px;
+    align-content: center;
+}
+
+.abob1{
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+.linkNO{
+    color: white; /* или color: inherit; */
+    text-decoration: none;
+}
+
+.spline-viewer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 90%;
+    height: 100%;
+    z-index: -1; /* Поместите на задний план */
+}
+
+/* Поместите стили .abob в конец файла CSS */
+.abob {
+    /* Ваши стили для body */
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+.navbar1 {
+    font-family: 'Montserrat', sans-serif; /* Применяем шрифт Montserrat к навигационной панели */
+}
+.abob1{
+    width: 85%;
+    height: 500px;
+    background-color: rgb(0, 0, 0);
+}

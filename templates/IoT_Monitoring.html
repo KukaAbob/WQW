@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Dashboards</title>
+  <link rel="stylesheet" href="/static/mainpage.css">
+  <style>
+    #map, #chartContainer {
+        height: 400px;
+        width: 400px;
+        display: inline-block; /* Размещение в одну линию */
+        margin-right: 20px; /* Отступ справа для разделения */
+        vertical-align: top; /* Выравнивание по верхнему краю */
+      }
+      /* Стили для контейнера карты */
+      #map {
+        height: 400px; /* Установка высоты карты */
+        width: 600px; /* Установка ширины карты */
+      }
+  
+  </style>
+ 
+</head>
+<body style="background: rgba(0, 0, 0, 1)">
+    <navbar class="navbar1">
+        <div style="display: flex;align-items: center; margin-left:20px;color:white;">
+        <img src="/static/logo.png" class="Logo"></img>
+        
+        <div class="navdiv1"> 
+            <span>
+                <a href="/IoT_Monitoring.html" class="linkNO">IoT Monitoring</a>
+            </span>
+        </div>
+        <div class="navdiv1">
+            <span>
+                <a href="/Smart_Home.html" class="linkNO">Smart Home</a>
+            </span>
+        </div>
+        <div class="navdiv1">
+            <span>
+                <a href="/IoT_Secur.html" class="linkNO">IoT Security</a>
+            </span>
+        </div>
+        <div class="navdiv1">
+            <span>
+                <a href="/mainpage.html" class="linkNO">Main Page</a>
+            </span>
+        </div>
+    </div>
+
+    </navbar>
+
+    <div style="position: relative; width: 99vw; height: 85vh; background: linear-gradient(to bottom, #4B0082, #000080); align-content: center;">
+        <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); display: flex; z-index: 2;">
+            <div style="width: 150px; height: 75px;  background-color: blue; margin-right: 10px; border: 2px solid black; border-radius: 10px;">
+                <div style="color: white;">
+                        <div>
+                                {% for forecast in today_forecasts %}
+                                <li>
+                                    <strong>Date and Time:</strong> <span>{{ forecast.DateTime }}</span><br>
+                                </li>
+                                {% endfor %}
+                        </div>
+                        
+                        
+                        
+                        
+                </div>
+            </div>
+            <div style="width: 150px; height: 75px;  background-color: blue; margin-right: 10px; border: 2px solid black; border-radius: 10px;">
+                <div style="color: white;">
+                    <tr th:each="forecast : ${forecasts}">
+                        <td th:text="${forecast.Temperature}"></td>
+                        {% for forecast in today_forecasts %}
+                                <li>
+                                    <strong>Temperature:</strong> <span>{{ forecast.Temperature }}</span><br>
+                                </li>
+                                {% endfor %}
+                </div>
+            </div>
+            <div style="width: 150px; height: 75px; background-color: blue; border: 2px solid black; border-radius: 10px;margin-right: 10px">
+                <div style="color: white;">
+                    <tr th:each="forecast : ${forecasts}">
+                        <td th:text="${forecast.Humidity}"></td>
+                        {% for forecast in today_forecasts %}
+                                <li>
+                                    <strong>Humidity:</strong> <span>{{ forecast.Humidity }}</span><br>
+                                </li>
+                                {% endfor %}
+                </div>
+            </div>
+            <div style="width: 150px; height: 75px; background-color: blue; border: 2px solid black; border-radius: 10px;">
+                <div style="color: white;">
+                    <tr th:each="forecast : ${forecasts}">
+                        <td th:text="${forecast.WindSpeed}"></td>
+                        {% for forecast in today_forecasts %}
+                                <li>
+                                    <strong>Wind Speed:</strong> <span>{{ forecast.WindSpeed }}</span><br>
+                                </li>
+                                {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;">
+            <div style="width: 100%; height: 100%;">
+                <script type="module" src="https://unpkg.com/@splinetool/viewer@1.3.0/build/spline-viewer.js"></script>
+                <spline-viewer url="https://prod.spline.design/ueTniXC1KtV9JoTQ/scene.splinecode"></spline-viewer>
+            </div>
+        </div>
+    </div>
+    <div style="position: relative; width: 99vw; height: 85vh; background: linear-gradient(to bottom, #4B0082, #000080); align-content: center;">
+    <div style="width: 800px; height: 400px; margin: 0 auto;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <!-- Подключение библиотеки Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Функция для форматирования даты в формате "YYYY-MM-DD"
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Функция для получения дат последней недели (на два дня вперед и на четыре дня назад от текущей даты)
+        function getLastWeekDates() {
+            const today = new Date();
+            const lastWeekDates = [];
+            for (let i = -4; i <= 2; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() + i);
+                lastWeekDates.push(formatDate(date));
+            }
+            return lastWeekDates;
+        }
+    </script>
+
+        <script>
+            // Данные для графика
+            const labels = [];
+            const randomTemperatures = [];
+            const randomHum = []; // Объявляем массив для влажности
+            const randomWindSpeeds = [];
+            
+            {% for forecast in all_forecasts %}
+                labels.push('{{ forecast.DateTime }}');
+                randomTemperatures.push({{ forecast.Temperature }});
+                randomHum.push({{ forecast.Humidity }}); // Добавляем влажность
+                randomWindSpeeds.push({{ forecast.WindSpeed }});
+            {% endfor %}
+        
+            // Отображение данных на графике
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Temperature',
+                            data: randomTemperatures,
+                            fill: false,
+                            borderColor: 'rgb(255, 99, 132)',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Wind Speed',
+                            data: randomWindSpeeds,
+                            fill: false,
+                            borderColor: 'rgb(54, 162, 235)',
+                            tension: 0.1
+                        },
+                        { // Добавляем датасет для влажности
+                            label: 'Humidity',
+                            data: randomHum,
+                            fill: false,
+                            borderColor: 'rgb(100, 100, 100)',
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+        <script>
+        function initMap() {
+          var map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 51.1694, lng: 71.4491 },
+            zoom: 12
+          });
+    
+          var marker = new google.maps.Marker({
+            position: { lat: 51.1694, lng: 71.4491 },
+            map: map,
+            title: 'Город Астана'
+          });
+        }
+   
+    
+        // Загрузка скрипта Google Maps API
+        document.addEventListener('DOMContentLoaded', function() {
+          var script = document.createElement('script');
+          script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBPbAU65oAw7VtcbJ4_lXamraLUJaOsrx4&callback=initMap';
+          document.head.appendChild(script);
+        });
+      </script>
+</dvi>
+</body>
+</html>
