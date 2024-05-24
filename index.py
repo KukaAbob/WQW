@@ -1,3 +1,4 @@
+import os
 from flask import render_template, Flask
 from pymongo import MongoClient
 from datetime import datetime, timedelta
@@ -45,5 +46,5 @@ def monitoring():
     return render_template("IoT_Monitoring.html", today_forecasts=today_forecasts, all_forecasts=all_forecasts)
 
 if __name__ == '__main__':
-    port = 5000 
-    app.run(debug=True, port=port)
+    port = int(os.environ.get("PORT", 5000))  # Используем переменную окружения PORT или порт по умолчанию 5000
+    app.run(debug=True, host='0.0.0.0', port=port)
