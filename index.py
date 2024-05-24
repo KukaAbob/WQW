@@ -11,19 +11,39 @@ collection = db["forecasts"]
 def index():
     return render_template("mainpage.html")
 
+@app.route('/secur')
+def IoT_secur():
+    return render_template("IoT_Secur.html")
+
+@app.route('/smart_home')
+def Smart():
+    return render_template("Smart_Home.html")
+
 @app.route('/monitoring')
 def monitoring():
     # Получаем все прогнозы из базы данных
     all_forecasts = list(collection.find())
-
+    
     # Получаем сегодняшнюю дату
     today = datetime.now().date()
 
     # Фильтруем прогнозы, оставляя только сегодняшние
-    today_forecasts = [forecast for forecast in all_forecasts if datetime.strptime(forecast["DateTime"], "%Y-%m-%d %H:%M:%S").date() == today]
+    today_forecasts = []
+    for forecast in all_forecasts:
+        forecast_date = datetime.strptime(forecast["DateTime"], "%Y-%m-%d").date()
+        if forecast_date == today:
+            existing_forecast = collection.find_one({"DateTime": forecast["DateTime"]})
+            if existing_forecast:
+                # Обновляем существующий прогноз
+                collection.update_one({"_id": existing_forecast["_id"]}, {"$set": forecast})
+            else:
+                # Добавляем новый прогноз
+                collection.insert_one(forecast)
+            today_forecasts.append(forecast)
 
     # Передаем данные в шаблон и рендерим страницу
     return render_template("IoT_Monitoring.html", today_forecasts=today_forecasts, all_forecasts=all_forecasts)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = 5000 
+    app.run(debug=True, port=port)
