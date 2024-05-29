@@ -1,7 +1,7 @@
 import os
-from flask import render_template, Flask
+from flask import Flask, render_template
 from pymongo import MongoClient
-from datetime import datetime, timedelta
+from datetime import datetime
 from dotenv import load_dotenv
 
 # Загрузка переменных окружения из .env файла
@@ -9,25 +9,13 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Получение переменных окружения
-mongo_username = os.getenv("MONGO_USERNAME")
-mongo_password = os.getenv("MONGO_PASSWORD")
-mongo_cluster = os.getenv("MONGO_CLUSTER")
-mongo_dbname = os.getenv("MONGO_DBNAME")
+# Получение строки подключения из переменной окружения
+MONGO_CONNECT_URL = os.getenv("MONGO_CONNECT_URL")
 
-# Проверка значений переменных окружения
-print("MONGO_USERNAME:", mongo_username)
-print("MONGO_PASSWORD:", mongo_password)
-print("MONGO_CLUSTER:", mongo_cluster)
-print("MONGO_DBNAME:", mongo_dbname)
-
-# Формирование строки подключения
-mongo_uri = f"mongodb+srv://{mongo_username}:{mongo_password}@{mongo_cluster}/{mongo_dbname}?retryWrites=true&w=majority"
-
-client = MongoClient(mongo_uri)
-db = client[mongo_dbname]
+# Подключение к MongoDB
+client = MongoClient(MONGO_CONNECT_URL)
+db = client["weatherDB"]
 collection = db["forecasts"]
-
 @app.route('/')
 def index():
     return render_template("mainpage.html")
