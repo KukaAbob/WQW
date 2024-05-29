@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
-client = MongoClient("mongodb+srv://kukakarakuzov:Kuanis2006@cluster0.wjekppx.mongodb.net/?retryWrites=true&w=majority")
+client = MongoClient("mongodb+srv://abob@cluster0.wjekppx.mongodb.net/?retryWrites=true&w=majority")
 db = client["weatherDB"]
 collection = db["forecasts"]
 
