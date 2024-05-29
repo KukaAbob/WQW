@@ -4,10 +4,17 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
-client = MongoClient("mongodb+srv://abob@cluster0.wjekppx.mongodb.net/?retryWrites=true&w=majority")
-db = client["weatherDB"]
-collection = db["forecasts"]
+mongo_username = os.getenv("MONGO_USERNAME")
+mongo_password = os.getenv("MONGO_PASSWORD")
+mongo_cluster = os.getenv("MONGO_CLUSTER")
+mongo_dbname = os.getenv("MONGO_DBNAME")
 
+# Формирование строки подключения
+mongo_uri = f"mongodb+srv://{mongo_username}:{mongo_password}@{mongo_cluster}/?retryWrites=true&w=majority"
+
+client = MongoClient(mongo_uri)
+db = client[mongo_dbname]
+collection = db["forecasts"]
 @app.route('/')
 def index():
     return render_template("mainpage.html")
