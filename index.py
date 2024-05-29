@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 # Загрузка переменных окружения из .env файла
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates', static_folder='static')
+
 
 # Получение строки подключения из переменной окружения
 MONGO_CONNECT_URL = os.getenv("MONGO_CONNECT_URL")
