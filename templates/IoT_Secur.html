@@ -1,37 +1,350 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather Dashboards</title>
-  <link rel="stylesheet" href="/static/mainpage.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Умный Дом</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 1);
+            color: white;
+        }
+        .navbar1 {
+            display: flex;
+            align-items: center;
+            background-color: black;
+            padding: 10px;
+        }
+        .navbar1 .Logo {
+            height: 40px;
+            margin-right: 20px;
+        }
+        .navdiv1 {
+            margin-right: 20px;
+        }
+        .linkNO {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .linkNO:hover {
+            text-decoration: underline;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .hack-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .hack-button {
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+        .hack-button.active {
+            background-color: gray;
+        }
+        .floorplan {
+            position: relative;
+            max-width: 600px;
+        }
+        .floorplan img {
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .button {
+            position: absolute;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 10px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .button.disabled {
+            cursor: not-allowed;
+            background-color: grey;
+        }
+        .info-panel {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin-top: 10px;
+            color: black;
+            position: absolute;
+            z-index: 1;
+            max-width: 200px;
+        }
+        .info-panel img {
+            width: 100%;
+            height: auto;
+        }
+        .panel-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .cross-mark {
+            color: red;
+            font-weight: bold;
+            font-size: 20px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .hack-success {
+            display: none;
+            font-size: 24px;
+            color: red;
+            margin-top: 20px;
+        }
+        .attack-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #555;
+            padding: 15px;
+            margin: 10px 0;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+        .attack-info h2 {
+            margin-top: 0;
+            color: #ff7f50;
+        }
+        .intruder {
+            position: absolute;
+            left: -100px; /* Positioning it to the left of the house */
+            top: 50px;
+            display: none;
+            width: 75px;
+            height: 75px;
+            z-index: 1;
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .intruder-text {
+            position: absolute;
+            left: -100px; /* Positioning it to the left of the house */
+            top: 10px;
+            color: red;
+            font-size: 14px;
+            z-index: 2;
+        }
+        .attack-details {
+            font-size: 16px;
+            margin-top: 10px;
+            color: yellow;
+        }
+    </style>
 </head>
-<body style="background: rgba(0, 0, 0, 1)">
+<body>
     <navbar class="navbar1">
-        <div style="display: flex;align-items: center; margin-left:20px;color:white;">
-        <img src="logo.png" class="Logo"></img>
-        
-        <div class="navdiv1"> 
-            <span>
-                <a href="/IoT_Monitoring.html" class="linkNO">IoT Monitoring</a>
-            </span>
+        <div style="display: flex; align-items: center; margin-left: 20px; color: white;">
+            <img src="/static/logo.png" class="Logo">
+            <div class="navdiv1"> 
+                <span>
+                    <a href="/monitoring" class="linkNO">IoT Monitoring</a>
+                </span>
+            </div>
+            <div class="navdiv1">
+                <span>
+                    <a href="/smart_home" class="linkNO">Smart Home</a>
+                </span>
+            </div>
+            <div class="navdiv1">
+                <span>
+                    <a href="#" class="linkNO">IoT Security</a>
+                </span>
+            </div>
+            <div class="navdiv1">
+                <span>
+                    <a href="/" class="linkNO">Main Page</a>
+                </span>
+            </div>
         </div>
-        <div class="navdiv1">
-            <span>
-                <a href="/Smart_Home.html" class="linkNO">Smart Home</a>
-            </span>
+    </navbar>
+
+    <div class="container">
+        <h1>Умный Дом</h1>
+        <div class="floorplan">
+            <img src="/static/оры.png" alt="План квартиры" style="width:100%">
+            <img src="/static/intruder.png" alt="Злоумышленник" class="intruder" id="intruder">
+            <img src="/static/intruder.png" alt="Новая картинка" class="intruder" id="new-intruder">
+            <div class="intruder-text" id="intruder-text">Начат взлом...</div>
+            <div class="attack-details" id="attack-details"></div>
+            <!-- Гостиная -->
+            <button class="button" style="top: 50px; left: 150px;" onclick="togglePanel('light-info')">IoT</button>
+            <div id="light-info" class="info-panel" style="top: 50px; left: 200px;">
+                <div class="panel-header">Умные светильники</div>
+                <img src="smart-light.jpg" alt="Умные светильники">
+                <p>Умные светильники позволяют автоматически регулировать яркость и цвет освещения в зависимости от времени суток и ваших предпочтений.</p>
+            </div>
+            <button class="button" style="top: 100px; left: 120px;" onclick="togglePanel('assistant-info')">IoT</button>
+            <div id="assistant-info" class="info-panel" style="top: 100px; left: 220px;">
+                <div class="panel-header">Домашний ассистент</div>
+                <img src="home-assistant.jpg" alt="Домашний ассистент">
+                <p>Домашний ассистент может управлять всеми устройствами в вашем умном доме с помощью голосовых команд.</p>
+            </div>
+            <!-- Спальня -->
+            <button class="button" style="top: 230px; left: 250px;" onclick="togglePanel('thermostat-info')">IoT</button>
+            <div id="thermostat-info" class="info-panel" style="top: 200px; left: 25px;">
+                <div class="panel-header">Умный термостат</div>
+                <img src="smart-thermostat.jpg" alt="Умный термостат">
+                <p>Умный термостат помогает поддерживать комфортную температуру в комнате и экономить энергию.</p>
+            </div>
+            <button class="button" style="top: 350px; left: 400px;" onclick="togglePanel('lock-info')">IoT</button>
+            <div id="lock-info" class="info-panel" style="top: 250px; left: 180px;">
+                <div class="panel-header">Умные замки</div>
+                <img src="smart-lock.jpg" alt="Умные замки">
+                <p>Умные замки обеспечивают высокий уровень безопасности и позволяют управлять доступом в помещение удаленно.</p>
+            </div>
+            <!-- Кухня -->
+            <button class="button" style="top: 50px; left: 320px;" onclick="togglePanel('outlet-info')">IoT</button>
+            <div id="outlet-info" class="info-panel" style="top: 50px; left: 420px;">
+                <div class="panel-header">Умные розетки</div>
+                <img src="smart-outlet.jpg" alt="Умные розетки">
+                <p>Умные розетки позволяют управлять питанием устройств удаленно и экономить электроэнергию.</p>
+            </div>
+            <button class="button" style="top: 300px; left: 380px;" onclick="togglePanel('fridge-info')">IoT</button>
+            <div id="fridge-info" class="info-panel" style="top: 300px; left: 460px;">
+                <div class="panel-header">Умный холодильник</div>
+                <img src="smart-fridge.jpg" alt="Умный холодильник">
+                <p>Умный холодильник позволяет следить за сроком годности продуктов и составлять списки покупок.</p>
+            </div>
         </div>
-        <div class="navdiv1">
-            <span>
-                <a href="/IoT_Secur.html" class="linkNO">IoT Security</a>
-            </span>
+
+        <div class="hack-button-container">
+            <button class="hack-button" onclick="performAttack('type1')">Атака на слабые пароли и учётные записи</button>
+            <button class="hack-button" onclick="performAttack('type2')">Атака с использованием уязвимостей в сетевом протоколе</button>
+            <button class="hack-button" onclick="performAttack('type3')">DDoS-атака</button>
         </div>
-        <div class="navdiv1">
-            <span>
-                <a href="/mainpage.html" class="linkNO">Main Page</a>
-            </span>
+
+        <div id="attack-info" class="attack-info">
+            <h2>Результаты атаки:</h2>
+            <div id="attack-text"></div>
+        </div>
+
+        <div id="hack-success" class="hack-success">
+            Взлом выполнен успешно!
+        </div>
+
+        <div class="attack-info" id="password-attack">
+            <h2>Атака на слабые пароли и учётные записи</h2>
+            <p>Эта атака направлена на выявление слабых паролей и учетных записей, чтобы получить несанкционированный доступ к системе.</p>
+        </div>
+
+        <div class="attack-info" id="network-attack">
+            <h2>Атака с использованием уязвимостей в сетевом протоколе</h2>
+            <p>Эта атака использует уязвимости в сетевых протоколах для проникновения в систему и выполнения нежелательных действий.</p>
+        </div>
+
+        <div class="attack-info" id="ddos-attack">
+            <h2>DDoS-атака (Distributed Denial of Service)</h2>
+            <p>Эта атака направлена на перегрузку сервера или сети путем отправки большого количества запросов с разных устройств, что делает систему недоступной для легитимных пользователей.</p>
         </div>
     </div>
 
-    </navbar>
+    <script>
+        function togglePanel(panelId) {
+            var panel = document.getElementById(panelId);
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+            } else {
+                panel.style.display = 'block';
+            }
+        }
+
+        function performAttack(type) {
+            var buttons = document.getElementsByClassName('hack-button');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.add('active');
+                buttons[i].disabled = true;
+            }
+            
+            var intruder = document.getElementById('intruder');
+            var newIntruder = document.getElementById('new-intruder');
+            var intruderText = document.getElementById('intruder-text');
+            var attackDetails = document.getElementById('attack-details');
+            intruder.style.display = 'block';
+            newIntruder.style.display = 'block';
+            intruderText.style.display = 'block';
+            attackDetails.style.display = 'block';
+
+            var attackInfo = document.getElementById('attack-info');
+            var attackText = document.getElementById('attack-text');
+            attackInfo.style.display = 'block';
+            attackText.innerHTML = '...';
+
+            var interval = setInterval(function() {
+                if (attackText.innerHTML.length < 3) {
+                    attackText.innerHTML += '.';
+                } else {
+                    attackText.innerHTML = '.';
+                }
+            }, 500);
+
+            if (type === 'type1') {
+                attackDetails.innerHTML = 'Подбор паролей Брутфорс';
+            } else if (type === 'type2') {
+                attackDetails.innerHTML = 'Использование уязвимостей в сетевом протоколе...';
+            } else if (type === 'type3') {
+                attackDetails.innerHTML = 'Отправка большого количества запросов для перегрузки сервера (DDoS)...';
+            }
+
+            setTimeout(function() {
+                clearInterval(interval);
+                document.getElementById('hack-success').style.display = 'block';
+                
+                setTimeout(function() {
+                    attackText.innerHTML = 'Результат:';
+                    if (type === 'type1') {
+                        attackText.innerHTML += ' Атака Брутфорсом успешно завершена. Теперь есть доступ к умным замкам';
+                        showAttackInfo('password-attack');
+                    } else if (type === 'type2') {
+                        attackText.innerHTML += ' Атака Сетевого протокола успешно завершена. Есть доступ к личным данным';
+                        showAttackInfo('network-attack');
+                    } else if (type === 'type3') {
+                        attackText.innerHTML += ' Атака Ddos успешно завершена. Отключены все системы умного дома';
+                        showAttackInfo('ddos-attack');
+                    }
+                    attackInfo.scrollIntoView({ behavior: 'smooth' });
+                    for (var i = 0; i < buttons.length; i++) {
+                        buttons[i].classList.remove('active');
+                        buttons[i].disabled = false;
+                    }
+                }, 2000);
+            }, 1000);
+        }
+
+        function showAttackInfo(attackId) {
+            var attackInfos = document.getElementsByClassName('attack-info');
+            for (var i = 0; i < attackInfos.length; i++) {
+                attackInfos[i].style.display = 'block';
+            }
+            document.getElementById(attackId).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
 </body>
+</html>

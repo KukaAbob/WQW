@@ -8,59 +8,95 @@
   <script type="module" src="https://unpkg.com/@splinetool/viewer@1.3.1/build/spline-viewer.js"></script>
   <script type="module" src="/static/index.js"></script>
   <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.3.0/stitch.js"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .section {
+      position: relative;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid grey; /* Adding a border to the sections */
+      margin: 20px;
+      background-color: rgba(0, 0, 0, 0.7); /* Optional: Adding a semi-transparent background for better readability */
+    }
+    .section img {
+      width: 525px; /* Setting a fixed width for images */
+      height: 325px; /* Setting a fixed height for images */
+      margin: 10px;
+    }
+    .section p {
+      color: white; /* Setting text color to white */
+    }
+    .section .learn-more {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      background-color: blue;
+      padding: 10px;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body class="abob">
-    <navbar class="navbar1">
-        <div style="display: flex;align-items: center; margin-left:20px;color:white;">
-        <img src="/static/logo.png" class="Logo"></img>
-        
-        <div class="navdiv1"> 
-            <span>
-                <a href="#Heh" class="linkNO">IoT Monitoring</a>
-            </span>
-        </div>
-        <div class="navdiv1">
-            <span>
-                <a href="#ne_Heh" class="linkNO">Smart Home</a>
-            </span>
-        </div>
-        <div class="navdiv1">
-            <span>
-                <a href="#NENADO" class="linkNO">IoT Security</a>
-            </span>
-        </div>
-        
+  <navbar class="navbar1">
+    <div style="display: flex;align-items: center; margin-left:20px;color:white;">
+      <img src="/static/logo.png" class="Logo">
+      <div class="navdiv1"> 
+        <span>
+          <a href="#Heh" class="linkNO">IoT Monitoring</a>
+        </span>
+      </div>
+      <div class="navdiv1">
+        <span>
+          <a href="#ne_Heh" class="linkNO">Smart Home</a>
+        </span>
+      </div>
+      <div class="navdiv1">
+        <span>
+          <a href="#NENADO" class="linkNO">IoT Security</a>
+        </span>
+      </div>
     </div>
-
-    </navbar>
-    <div style="height: 1080px;">
+  </navbar>
+  <div style="height: 750px;">
     <spline-viewer url="https://prod.spline.design/1-sjhTtmyCWXo7gy/scene.splinecode"></spline-viewer>
-    </div>
-    <div class="abob">
+  </div>
+  <div class="abob">
+    <div>
+      <div class="abob1 section" id="Heh">
         <div>
-            <div class="abob1" id="Heh">
-                <div>
-
-                </div>
-                <div>
-                <a href="/monitoring" class="linkNO">Learn more</a>
-                </div>
-            </div>
-            <div class="abob1" id="ne_Heh">
-                <div>
-                    <a href="/Smart_Home.html" class="linkNO">Learn more</a>
-                </div>
-            </div>
-            <div class="abob1" id="NENADO">
-                <div>
-                    <a href="/IoT_Secur.html" class="linkNO">Learn more</a>
-                </div>
-            </div>
-            
+          <img src="/static/12.PNG" alt="Image 1">
+          <img src="/static/34.PNG" alt="Image 2">
         </div>
+        <div>
+          <p>Here is the description text for the monitoring section. It can contain details about the images and relevant information.</p>
+        </div>
+        <a href="/monitoring" class="learn-more linkNO">Learn more</a>
+      </div>
+      <div class="abob1 section" id="ne_Heh">
+        <div>
+          <img src="/static/45.PNG" alt="Image 1">
 
-        <footer></footer>
+        </div>
+        <div>
+          <p>Here is the description text for the Smart Home section. It can contain details about the images and relevant information.</p>
+        </div>
+        <a href="/smart_home" class="learn-more linkNO">Learn more</a>
+      </div>
+      <div class="abob1 section" id="NENADO">
+        <div>
+          <img src="/static/56.PNG" alt="Image 1">
+          <img src="/static/67.PNG" alt="Image 2">
+        </div>
+        <div>
+          <p>Here is the description text for the IoT Security section. It can contain details about the images and relevant information.</p>
+        </div>
+        <a href="/secur" class="learn-more linkNO">Learn more</a>
+      </div>
     </div>
-
+    <footer></footer>
+  </div>
 </body>
 </html>

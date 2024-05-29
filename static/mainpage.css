@@ -1,3 +1,8 @@
+html {
+    scroll-behavior: smooth;
+  }
+  
+
 .abob{
     background-color: black;
 }
@@ -31,18 +36,14 @@
     left: 0;
     width: 90%;
     height: 100%;
-    z-index: -1; /* Поместите на задний план */
+    z-index: -1;
 }
 
-/* Поместите стили .abob в конец файла CSS */
-.abob {
-    /* Ваши стили для body */
-}
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 .navbar1 {
-    font-family: 'Montserrat', sans-serif; /* Применяем шрифт Montserrat к навигационной панели */
+    font-family: 'Montserrat', sans-serif;
 }
 .abob1{
     width: 85%;

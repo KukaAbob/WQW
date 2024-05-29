@@ -6,21 +6,21 @@
   <title>Weather Dashboards</title>
   <link rel="stylesheet" href="/static/mainpage.css">
   <style>
-    #map, #chartContainer {
-        height: 400px;
-        width: 400px;
+    #map {
+        height: 300px; /* Уменьшена высота карты */
+        width: 300px; /* Уменьшена ширина карты */
         display: inline-block; /* Размещение в одну линию */
         margin-right: 20px; /* Отступ справа для разделения */
         vertical-align: top; /* Выравнивание по верхнему краю */
       }
-      /* Стили для контейнера карты */
-      #map {
-        height: 400px; /* Установка высоты карты */
-        width: 600px; /* Установка ширины карты */
+      /* Стили для контейнера графика */
+      #chartContainer {
+        height: 400px; /* Установка высоты графика */
+        width: 600px; /* Увеличена ширина графика */
+        display: inline-block; /* Размещение в одну линию */
+        vertical-align: top; /* Выравнивание по верхнему краю */
       }
-  
   </style>
- 
 </head>
 <body style="background: rgba(0, 0, 0, 1)">
     <navbar class="navbar1">
@@ -29,26 +29,25 @@
         
         <div class="navdiv1"> 
             <span>
-                <a href="/IoT_Monitoring.html" class="linkNO">IoT Monitoring</a>
+                <a href="#" class="linkNO">IoT Monitoring</a>
             </span>
         </div>
         <div class="navdiv1">
             <span>
-                <a href="/Smart_Home.html" class="linkNO">Smart Home</a>
+                <a href="/smart_home" class="linkNO">Smart Home</a>
             </span>
         </div>
         <div class="navdiv1">
             <span>
-                <a href="/IoT_Secur.html" class="linkNO">IoT Security</a>
+                <a href="/secur" class="linkNO">IoT Security</a>
             </span>
         </div>
         <div class="navdiv1">
             <span>
-                <a href="/mainpage.html" class="linkNO">Main Page</a>
+                <a href="/" class="linkNO">Main Page</a>
             </span>
         </div>
     </div>
-
     </navbar>
 
     <div style="position: relative; width: 99vw; height: 85vh; background: linear-gradient(to bottom, #4B0082, #000080); align-content: center;">
@@ -57,15 +56,11 @@
                 <div style="color: white;">
                         <div>
                                 {% for forecast in today_forecasts %}
-                                <li>
+                                
                                     <strong>Date and Time:</strong> <span>{{ forecast.DateTime }}</span><br>
-                                </li>
+                                
                                 {% endfor %}
                         </div>
-                        
-                        
-                        
-                        
                 </div>
             </div>
             <div style="width: 150px; height: 75px;  background-color: blue; margin-right: 10px; border: 2px solid black; border-radius: 10px;">
@@ -73,9 +68,9 @@
                     <tr th:each="forecast : ${forecasts}">
                         <td th:text="${forecast.Temperature}"></td>
                         {% for forecast in today_forecasts %}
-                                <li>
+                                
                                     <strong>Temperature:</strong> <span>{{ forecast.Temperature }}</span><br>
-                                </li>
+                            
                                 {% endfor %}
                 </div>
             </div>
@@ -84,9 +79,9 @@
                     <tr th:each="forecast : ${forecasts}">
                         <td th:text="${forecast.Humidity}"></td>
                         {% for forecast in today_forecasts %}
-                                <li>
+                                
                                     <strong>Humidity:</strong> <span>{{ forecast.Humidity }}</span><br>
-                                </li>
+                                
                                 {% endfor %}
                 </div>
             </div>
@@ -95,9 +90,9 @@
                     <tr th:each="forecast : ${forecasts}">
                         <td th:text="${forecast.WindSpeed}"></td>
                         {% for forecast in today_forecasts %}
-                                <li>
+                                
                                     <strong>Wind Speed:</strong> <span>{{ forecast.WindSpeed }}</span><br>
-                                </li>
+                               
                                 {% endfor %}
                 </div>
             </div>
@@ -109,14 +104,18 @@
             </div>
         </div>
     </div>
+    
     <div style="position: relative; width: 99vw; height: 85vh; background: linear-gradient(to bottom, #4B0082, #000080); align-content: center;">
-    <div style="width: 800px; height: 400px; margin: 0 auto;">
-        <canvas id="myChart"></canvas>
+        <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+            <div id="map"></div>
+            <div id="chartContainer">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
     </div>
 
     <!-- Подключение библиотеки Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script>
         // Функция для форматирования даты в формате "YYYY-MM-DD"
         function formatDate(date) {
@@ -139,81 +138,79 @@
         }
     </script>
 
-        <script>
-            // Данные для графика
-            const labels = [];
-            const randomTemperatures = [];
-            const randomHum = []; // Объявляем массив для влажности
-            const randomWindSpeeds = [];
-            
-            {% for forecast in all_forecasts %}
-                labels.push('{{ forecast.DateTime }}');
-                randomTemperatures.push({{ forecast.Temperature }});
-                randomHum.push({{ forecast.Humidity }}); // Добавляем влажность
-                randomWindSpeeds.push({{ forecast.WindSpeed }});
-            {% endfor %}
+    <script>
+        // Данные для графика
+        const labels = [];
+        const randomTemperatures = [];
+        const randomHum = []; // Объявляем массив для влажности
+        const randomWindSpeeds = [];
         
-            // Отображение данных на графике
-            const ctx = document.getElementById('myChart').getContext('2d');
-            const myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Temperature',
-                            data: randomTemperatures,
-                            fill: false,
-                            borderColor: 'rgb(255, 99, 132)',
-                            tension: 0.1
-                        },
-                        {
-                            label: 'Wind Speed',
-                            data: randomWindSpeeds,
-                            fill: false,
-                            borderColor: 'rgb(54, 162, 235)',
-                            tension: 0.1
-                        },
-                        { // Добавляем датасет для влажности
-                            label: 'Humidity',
-                            data: randomHum,
-                            fill: false,
-                            borderColor: 'rgb(100, 100, 100)',
-                            tension: 0.1
-                        }
-                    ]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+        {% for forecast in all_forecasts %}
+            labels.push('{{ forecast.DateTime }}');
+            randomTemperatures.push({{ forecast.Temperature }});
+            randomHum.push({{ forecast.Humidity }}); // Добавляем влажность
+            randomWindSpeeds.push({{ forecast.WindSpeed }});
+        {% endfor %}
+    
+        // Отображение данных на графике
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Temperature',
+                        data: randomTemperatures,
+                        fill: false,
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Wind Speed',
+                        data: randomWindSpeeds,
+                        fill: false,
+                        borderColor: 'rgb(54, 162, 235)',
+                        tension: 0.1
+                    },
+                    { // Добавляем датасет для влажности
+                        label: 'Humidity',
+                        data: randomHum,
+                        fill: false,
+                        borderColor: 'rgb(100, 100, 100)',
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
-        </script>
-        <script>
+            }
+        });
+    </script>
+    <script>
         function initMap() {
-          var map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 51.1694, lng: 71.4491 },
-            zoom: 12
-          });
-    
-          var marker = new google.maps.Marker({
-            position: { lat: 51.1694, lng: 71.4491 },
-            map: map,
-            title: 'Город Астана'
-          });
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 51.1694, lng: 71.4491 },
+                zoom: 12
+            });
+
+            var marker = new google.maps.Marker({
+                position: { lat: 51.1694, lng: 71.4491 },
+                map: map,
+                title: 'Город Астана'
+            });
         }
-   
-    
+
         // Загрузка скрипта Google Maps API
         document.addEventListener('DOMContentLoaded', function() {
-          var script = document.createElement('script');
-          script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBPbAU65oAw7VtcbJ4_lXamraLUJaOsrx4&callback=initMap';
-          document.head.appendChild(script);
+            var script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBPbAU65oAw7VtcbJ4_lXamraLUJaOsrx4&callback=initMap';
+            document.head.appendChild(script);
         });
-      </script>
-</dvi>
+    </script>
 </body>
 </html>
