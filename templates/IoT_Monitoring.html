@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,44 +56,30 @@
                 <div style="color: white;">
                         <div>
                                 {% for forecast in today_forecasts %}
-                                
                                     <strong>Date and Time:</strong> <span>{{ forecast.DateTime }}</span><br>
-                                
                                 {% endfor %}
                         </div>
                 </div>
             </div>
             <div style="width: 150px; height: 75px;  background-color: blue; margin-right: 10px; border: 2px solid black; border-radius: 10px;">
                 <div style="color: white;">
-                    <tr th:each="forecast : ${forecasts}">
-                        <td th:text="${forecast.Temperature}"></td>
-                        {% for forecast in today_forecasts %}
-                                
-                                    <strong>Temperature:</strong> <span>{{ forecast.Temperature }}</span><br>
-                            
-                                {% endfor %}
+                    {% for forecast in today_forecasts %}
+                        <strong>Temperature:</strong> <span>{{ forecast.Temperature }}</span><br>
+                    {% endfor %}
                 </div>
             </div>
             <div style="width: 150px; height: 75px; background-color: blue; border: 2px solid black; border-radius: 10px;margin-right: 10px">
                 <div style="color: white;">
-                    <tr th:each="forecast : ${forecasts}">
-                        <td th:text="${forecast.Humidity}"></td>
-                        {% for forecast in today_forecasts %}
-                                
-                                    <strong>Humidity:</strong> <span>{{ forecast.Humidity }}</span><br>
-                                
-                                {% endfor %}
+                    {% for forecast in today_forecasts %}
+                        <strong>Humidity:</strong> <span>{{ forecast.Humidity }}</span><br>
+                    {% endfor %}
                 </div>
             </div>
             <div style="width: 150px; height: 75px; background-color: blue; border: 2px solid black; border-radius: 10px;">
                 <div style="color: white;">
-                    <tr th:each="forecast : ${forecasts}">
-                        <td th:text="${forecast.WindSpeed}"></td>
-                        {% for forecast in today_forecasts %}
-                                
-                                    <strong>Wind Speed:</strong> <span>{{ forecast.WindSpeed }}</span><br>
-                               
-                                {% endfor %}
+                    {% for forecast in today_forecasts %}
+                        <strong>Wind Speed:</strong> <span>{{ forecast.WindSpeed }}</span><br>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -208,7 +194,7 @@
         // Загрузка скрипта Google Maps API
         document.addEventListener('DOMContentLoaded', function() {
             var script = document.createElement('script');
-            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBPbAU65oAw7VtcbJ4_lXamraLUJaOsrx4&callback=initMap';
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap';
             document.head.appendChild(script);
         });
     </script>
