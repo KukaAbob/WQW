@@ -9,8 +9,14 @@ mongo_password = os.getenv("MONGO_PASSWORD")
 mongo_cluster = os.getenv("MONGO_CLUSTER")
 mongo_dbname = os.getenv("MONGO_DBNAME")
 
+# Проверка значений переменных окружения
+print("MONGO_USERNAME:", mongo_username)
+print("MONGO_PASSWORD:", mongo_password)
+print("MONGO_CLUSTER:", mongo_cluster)
+print("MONGO_DBNAME:", mongo_dbname)
+
 # Формирование строки подключения
-mongo_uri = f"mongodb+srv://{mongo_username}:{mongo_password}@{mongo_cluster}/?retryWrites=true&w=majority"
+mongo_uri = f"mongodb+srv://{mongo_username}:{mongo_password}@{mongo_cluster}/{mongo_dbname}?retryWrites=true&w=majority"
 
 client = MongoClient(mongo_uri)
 db = client[mongo_dbname]
