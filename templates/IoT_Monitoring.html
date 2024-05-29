@@ -194,8 +194,7 @@
         // Загрузка скрипта Google Maps API
         document.addEventListener('DOMContentLoaded', function() {
             var script = document.createElement('script');
-            GOOGLE_API = os.getenv("GOOGLE_API")
-            script.src = GOOGLE_API;
+            script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD4hVB_-8gznLuT57YD1dLKsmsVaW1lapA&callback=initMap";
             document.head.appendChild(script);
         });
     </script>
