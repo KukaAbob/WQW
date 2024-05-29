@@ -2,8 +2,14 @@ import os
 from flask import render_template, Flask
 from pymongo import MongoClient
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
+# Загрузка переменных окружения из .env файла
+load_dotenv()
 
 app = Flask(__name__)
+
+# Получение переменных окружения
 mongo_username = os.getenv("MONGO_USERNAME")
 mongo_password = os.getenv("MONGO_PASSWORD")
 mongo_cluster = os.getenv("MONGO_CLUSTER")
@@ -21,6 +27,7 @@ mongo_uri = f"mongodb+srv://{mongo_username}:{mongo_password}@{mongo_cluster}/{m
 client = MongoClient(mongo_uri)
 db = client[mongo_dbname]
 collection = db["forecasts"]
+
 @app.route('/')
 def index():
     return render_template("mainpage.html")
